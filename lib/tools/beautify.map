@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "beautify.js",
+  "sourceRoot": "",
+  "sources": [
+    "beautify.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA,sBAAA;;AAAA,EAAA,QAAA,GAAW,OAAA,CAAQ,aAAR,CAAsB,CAAC,WAAlC,CAAA;;AAAA,EAEA,YAAA,GACE;AAAA,IAAA,WAAA,EAAa,CAAb;GAHF,CAAA;;AAAA,EAKA,MAAM,CAAC,OAAP,GAAiB,SAAC,IAAD,GAAA;WACf,QAAA,CAAS,IAAT,EAAe,YAAf,EADe;EAAA,CALjB,CAAA;AAAA"
+}
