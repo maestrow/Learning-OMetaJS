@@ -32,6 +32,33 @@ join = (lines) ->
   lines.join '\n'
 
 ###
+Business logic
+###
+
+preProcess = (content) ->
+  debugThisMethod = false
+  opts = {defaultDelimeter:'\n'}
+  rxText = "```ometajs-expr-eval+\\r?\\n([\\s\\S]+?)\\r?\\n```"
+  matches = content.match new RegExp rxText, 'g'
+  for match in matches
+    code = (match.match new RegExp rxText)[1]
+    data = new CodeParser(code).parse(debugThisMethod)
+    text = if debugThisMethod then data else new Templator(opts).apply data, templates
+    content = content.replace match, text
+  content
+
+task 'build', 'Builds all cases', (opts) ->
+  opts ?= {}
+  opts.srcDir ?= '../cases'
+  opts.outDir ?= '../doc'
+  srcDir = path.resolve(__dirname, opts.srcDir)
+  outDir = path.resolve(__dirname, opts.outDir)
+  for f in fs.readdirSync srcDir when /\.expr.md$/.test f
+    newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
+    content = processFile "#{srcDir}/#{f}", [preProcess, marked]
+    fs.writeFileSync newFileName, content
+
+###
 Templates
 ###
 
@@ -63,33 +90,3 @@ templates =
   """
   evaluations: "* `${input}` **evaluates to:** `${result}`"
 
-###
-Business logic
-###
-
-preProcess = (content) ->
-  debugThisMethod = false
-  opts = {defaultDelimeter:'\n'}
-  rxText = "```ometajs-expr-eval+\\r?\\n([\\s\\S]+?)\\r?\\n```"
-  matches = content.match new RegExp rxText, 'g'
-  for match in matches
-    code = (match.match new RegExp rxText)[1]
-    data = new CodeParser(code).parse(debugThisMethod)
-    text = if debugThisMethod then data else new Templator(opts).apply data, templates
-    content = content.replace match, text
-  content
-
-###
-Tasks
-###
-
-task 'build', 'Builds all cases', (opts) ->
-  opts ?= {}
-  opts.srcDir ?= '../cases'
-  opts.outDir ?= '../doc'
-  srcDir = path.resolve(__dirname, opts.srcDir)
-  outDir = path.resolve(__dirname, opts.outDir)
-  for f in fs.readdirSync srcDir when /\.expr.md$/.test f
-    newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
-    content = processFile "#{srcDir}/#{f}", [preProcess, marked]
-    fs.writeFileSync newFileName, content
