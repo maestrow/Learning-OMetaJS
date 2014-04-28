@@ -27,6 +27,6 @@ Then you can compile that expression:
 and debug it
  */
 
-var grammar = require('./tmp/testGrammar.js').GeneratedGrammar;
+var grammar = require('./../tmp/testGrammar.js').GeneratedGrammar;
 var result = grammar.matchAll('55', 'generatedRule');
 console.log(result);
