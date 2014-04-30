@@ -1,0 +1,25 @@
+// https://github.com/aredridel/ometa-data-url/blob/master/DataUrl.ometajs
+
+ometa DataUrl {
+    scheme = seq('data:'),
+
+        type = /[a-z-]+/i,
+
+        charset = /[a-z0-9-]+/i,
+
+        mimeType = type:p '/' type:q ( seq(';charset=') charset:c )? -> ({type: p, subtype: q, charset: c}),
+
+        base64 = seq(';base64'),
+
+        b64data = /[A-Za-z0-9+-]+/:d -> (new Buffer(d, 'base64')),
+
+        data = /.*/:d -> decodeURIComponent(d),
+
+        dataUrl = scheme mimeType:m (',' data:d -> d | base64 ',' b64data:x -> x):d -> ({data: d, type: m })
+}
+
+DataUrl.parse = function (str) {
+    return DataUrl.matchAll(str, 'dataUrl');
+};
+
+module.exports = DataUrl;

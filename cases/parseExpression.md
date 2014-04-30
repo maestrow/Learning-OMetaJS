@@ -1,5 +1,8 @@
 # OMetaJS Expressions Use Cases
 
+Реализацию обработки описанных синтаксических конструкций смотрите в методе
+[parseExpresion](https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L179) парсера.
+
 ## Sequence match ``123''
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L322>
 
@@ -83,6 +86,9 @@
     ?this._match('2')
 ```
 
+Other examples:
+* `'<' ?{this._options.phase == 'pre'} | '>' ?{this._options.phase == 'post'}`
+
 ## Super call ^rule
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L250>
 
@@ -109,3 +115,4 @@
     ('a'|'b'|'c')
         b
 ```
+

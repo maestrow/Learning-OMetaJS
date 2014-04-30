@@ -53,7 +53,7 @@ task 'build', 'Builds all cases', (opts) ->
   opts.outDir ?= '../doc'
   srcDir = path.resolve(__dirname, opts.srcDir)
   outDir = path.resolve(__dirname, opts.outDir)
-  for f in fs.readdirSync srcDir when /\.expr.md$/.test f
+  for f in fs.readdirSync srcDir when /\.md$/.test f
     newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
     content = processFile "#{srcDir}/#{f}", [preProcess, marked]
     fs.writeFileSync newFileName, content

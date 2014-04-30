@@ -79,6 +79,7 @@ cli.on '--help', ->
     '  You can specify only one options from each list, but not their combinations:'
     '    -g, -ef, e'
     '    -i, if'
+    ''
     '  Examples:'
     '    cli.coffee eval "^digit:a ^digit:b -> a*b" "56"'
     '    cli.coffee eval """123""" "123"'
