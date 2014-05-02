@@ -5,6 +5,7 @@ marked = require 'marked'
 {CodeParser} = require './build/CodeParser'
 {Templator} = require './build/Templator'
 
+
 ###
 Common Utils
 ###
@@ -31,32 +32,6 @@ split = (text) ->
 join = (lines) ->
   lines.join '\n'
 
-###
-Business logic
-###
-
-preProcess = (content) ->
-  debugThisMethod = false
-  opts = {defaultDelimeter:'\n'}
-  rxText = "```ometajs-expr-eval+\\r?\\n([\\s\\S]+?)\\r?\\n```"
-  matches = content.match new RegExp rxText, 'g'
-  for match in matches
-    code = (match.match new RegExp rxText)[1]
-    data = new CodeParser(code).parse(debugThisMethod)
-    text = if debugThisMethod then data else new Templator(opts).apply data, templates
-    content = content.replace match, text
-  content
-
-task 'build', 'Builds all cases', (opts) ->
-  opts ?= {}
-  opts.srcDir ?= '../cases'
-  opts.outDir ?= '../doc'
-  srcDir = path.resolve(__dirname, opts.srcDir)
-  outDir = path.resolve(__dirname, opts.outDir)
-  for f in fs.readdirSync srcDir when /\.md$/.test f
-    newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
-    content = processFile "#{srcDir}/#{f}", [preProcess, marked]
-    fs.writeFileSync newFileName, content
 
 ###
 Templates
@@ -65,7 +40,7 @@ Templates
 templates =
   _: """
 
-    ### Expression ` ${expr} `
+    ### Expression ` ${parser} `
 
     #### Compilations
 
@@ -89,4 +64,37 @@ templates =
     ${evaluations}
   """
   evaluations: "* `${input}` **evaluates to:** `${result}`"
+
+
+###
+Business logic
+###
+
+preProcess = (content) ->
+  debugThisMethod = false
+  tplOpts = {defaultDelimeter:'\n'}
+  rxText = "```ometajs-eval(\\{.+?\\})?\\r?\\n([\\s\\S]+?)\\r?\\n```"
+  matches = content.match new RegExp rxText, 'g'
+
+  getData = (parserOpts, code) ->
+    parserOpts = if parserOpts? then parserOpts.replace /([a-z][^:]*)(?=\s*:)/g, '"$1"' else {}
+    new CodeParser(code, parserOpts).parse(debugThisMethod)
+
+  for match in matches
+    data = getData.apply @, (match.match new RegExp rxText)[1..2]
+    text = if debugThisMethod then data else new Templator(tplOpts).apply data, templates
+    content = content.replace match, text
+  content
+
+task 'build', 'Builds all cases', (opts) ->
+  opts ?= {}
+  opts.srcDir ?= '../cases'
+  opts.outDir ?= '../doc'
+  srcDir = path.resolve(__dirname, opts.srcDir)
+  outDir = path.resolve(__dirname, opts.outDir)
+  fs.unlinkSync path.resolve outDir, f for f in fs.readdirSync outDir #when /\.html$/.test f
+  for f in fs.readdirSync srcDir when /\.md$/.test f
+    newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
+    content = processFile "#{srcDir}/#{f}", [preProcess, marked]
+    fs.writeFileSync newFileName, content
 

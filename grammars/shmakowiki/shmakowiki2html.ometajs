@@ -1,0 +1,75 @@
+// https://github.com/veged/shmakowiki/blob/master/src/shmakowiki2html.ometajs
+
+ometa ShmakoWikiToHtml {
+    keyword = 'para'
+            | 'header1' | 'header2' | 'header3'
+            | 'header4' | 'header5' | 'header6'
+            | 'olist' | 'ulist' | 'olistItem' | 'ulistItem'
+            | 'bold' | 'bold_'
+            | 'italic' | 'italic_'
+            | 'underline' | 'underline_'
+            | 'strike' | 'strike_'
+            | 'monospace' | 'monospace_'
+            | 'superscript' | 'superscript_'
+            | 'subscript' | 'subscript_'
+            | 'link' | 'link_'
+            | 'lineBreak'
+            | 'escaped'
+            | 'extension',
+
+    token = [keyword:t apply(t):ans] -> ans
+          | :c -> utils.htmlEscape(c),
+    tokens = [token*:c] -> c.join(''),
+
+
+    bold tokens:c -> ('<b>' + c + '</b>'),
+    bold_ tokens:c -> ('<b>' + c + '</b>'),
+
+    italic tokens:c -> ('<i>' + c + '</i>'),
+    italic_ tokens:c -> ('<i>' + c + '</i>'),
+
+    underline tokens:c -> ('<u>' + c + '</u>'),
+    underline_ tokens:c -> ('<u>' + c + '</u>'),
+
+    strike tokens:c -> ('<s>' + c + '</s>'),
+    strike_ tokens:c -> ('<s>' + c + '</s>'),
+
+    monospace tokens:c -> ('<tt>' + c + '</tt>'),
+    monospace_ tokens:c -> ('<tt>' + c + '</tt>'),
+
+    superscript tokens:c -> ('<sup>' + c + '</sup>'),
+    superscript_ tokens:c -> ('<sup>' + c + '</sup>'),
+
+    subscript tokens:c -> ('<sub>' + c + '</sub>'),
+    subscript_ tokens:c -> ('<sub>' + c + '</sub>'),
+
+    link token:c [] -> ('<a href="' + c + '">' + c + '</a>'),
+    link token:c tokens:cc -> ('<a href="' + c + '">' + cc + '</a>'),
+    link_ token:c -> ('<a href="' + c + '">' + c + '</a>'),
+
+    lineBreak :c -> ('<br/>'),
+
+    escaped tokens:c -> ('<span>' + c + '</span>'),
+
+    para tokens:c -> ('<p>' + c + '</p>'),
+
+    header1 tokens:c :a -> ('<h1 id="' + a + '">' + c + '</h1>'),
+    header2 tokens:c :a -> ('<h2 id="' + a + '">' + c + '</h2>'),
+    header3 tokens:c :a -> ('<h3 id="' + a + '">' + c + '</h3>'),
+    header4 tokens:c :a -> ('<h4 id="' + a + '">' + c + '</h4>'),
+    header5 tokens:c :a -> ('<h5 id="' + a + '">' + c + '</h5>'),
+    header6 tokens:c :a -> ('<h6 id="' + a + '">' + c + '</h6>'),
+
+    olist tokens:c -> ('<ol>' + c + '</ol>'),
+    ulist tokens:c -> ('<ul>' + c + '</ul>'),
+    olistItem tokens:c -> ('<li>' + c + '</li>'),
+    ulistItem tokens:c -> ('<li>' + c + '</li>'),
+
+    extension :t :c :p -> utils.getExtension(t, 'astToHtml', function(c, p) {
+        return '<div>' + utils.htmlEscape(c) + '</div>';
+    })(c, p),
+
+    topInline = tokens:c -> c,
+
+    topLevel = tokens:c -> ('<div class="shmakowiki">' + c + '</div>')
+}

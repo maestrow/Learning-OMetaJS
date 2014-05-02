@@ -1,7 +1,7 @@
 ###
   sample:
   eval {
-    expr: '^digit:a ^digit:b -> a*b'
+    parser: '^digit:a ^digit:b -> a*b'
     input: '56'
   }
 ###
@@ -11,6 +11,8 @@ beautify = require './tools/beautify'
 fs = require 'fs'
 
 # Common utils
+
+Array::last = -> @[@length - 1]
 
 requireFromString = (src, filename) ->
   m = new module.constructor
@@ -25,7 +27,7 @@ fromFile = (val) ->
 
 # Business logic heplers
 
-grammarType = {'grammar', 'expr'}
+parserFormat = {'grammar', 'rule', 'expr'}
 
 compilationFormat = {'ast', 'json', 'js'}
 
@@ -35,6 +37,11 @@ getGrammarObjectByPath = (path) ->
   require(path)[mainGrammarName]
 
 getGrammarObjectByText = (code, grammarName) ->
+  getRrammarName = (code) ->
+    matches = code.match         /ometa (\w+)/g
+    match = matches.last().match /ometa (\w+)/
+    match[1]
+  grammarName ?= getRrammarName code
   src = ometajs.compile code
   requireFromString(src)[grammarName]
 
@@ -42,22 +49,32 @@ generatedGrammarName = 'GeneratedGrammar'
 
 generatedRuleName = 'generatedRule'
 
-generateGrammar = (expression) ->
+generateGrammarByRule = (rule) ->
   "ometa #{generatedGrammarName} {
-       #{generatedRuleName} = #{expression}
+       #{rule}
   }
   "
+
+generateGrammarByExpr = (expression) ->
+  generateGrammarByRule "#{generatedRuleName} = #{expression}"
 
 # Business logic
 
 getGrammarText = (config) ->
-  if config.grammarPath? then fromFile config.grammarPath
-  else if config.expr? then generateGrammar config.expr
+  if config.parserPath? then fromFile config.parserPath
+  else if config.parser?
+    switch config.parserFormat
+      when parserFormat.grammar then config.parser
+      when parserFormat.rule then generateGrammarByRule config.parser
+      when parserFormat.expr then generateGrammarByExpr config.parser
+      else
+        if config.parser.match /\=/ then generateGrammarByRule config.parser
+        else generateGrammarByExpr config.parser
   else throw new Error 'Argument exception'
 
 getGrammarObject = (config) ->
-  if config.grammarPath? then getGrammarObjectByPath config.grammarPath
-  else if config.expr? then getGrammarObjectByText getGrammarText(config), generatedGrammarName
+  if config.parserPath? then getGrammarObjectByPath config.parserPath
+  else if config.parser? then getGrammarObjectByText getGrammarText(config)
   else throw new Error 'Argument exception'
 
 getGrammarAst = (config) ->
@@ -68,33 +85,32 @@ getGrammarAst = (config) ->
 
 ###
   config:
-    grammarPath
-    expr
+    parserPath
+    parser
     exprPath
     action
     input
-    rule
+    applyRule
     options
 ###
 exports.eval = (config) ->
   grammar = getGrammarObject config
   config.action = config.action || 'matchAll'
-  result = grammar[config.action] config.input, config.rule || generatedRuleName
+  result = grammar[config.action] config.input, config.applyRule || generatedRuleName
   result.toString()
 
 ###
   config:
-    grammarPath
-    expr
-    exprPath
-    truncate
-    format
+    parserPath | parser,
+    parserFormat,
+    truncate,
+    outputFormat
 ###
 exports.compile = (config) ->
   ast = getGrammarAst config
   compiler = ometajs.compiler.create ast
   result = compiler.execute()
-  switch config.format
+  switch config.outputFormat
     when compilationFormat.ast
       data = if config.truncate then ast[0][3][0][2][0] else ast
       beautify JSON.stringify data

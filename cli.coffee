@@ -12,8 +12,6 @@ grammar = require './lib/grammar'
 
 # Helpers
 
-getGrammarPath = (relPath) -> "./../#{relPath}.ometajs"
-
 fromFile = (val) ->
   fs.readFileSync val, encoding: 'utf8'
 
@@ -38,7 +36,11 @@ fromFileOpts = (opts, keys) ->
 
 prepareOptions = (opts) ->
   opts.output = getOutputStream opts.output
-  fromFileOpts opts, ['input', 'expr']
+  fromFileOpts opts, ['input']
+  opts.parserFormat =
+    if opts.grammar then 'grammar'
+    else if opts.rule then 'rule'
+    else 'expr'
 
 # CLI Commands logic
 
@@ -46,21 +48,21 @@ evaluate = ->
   [args..., opts] = arguments
   if args[2]? then opts.action = args[i++]
   else if args[1]?
-    opts.expr = args[0]
+    opts.parser = args[0]
     opts.input = args[1]
   else if args[0]? then opts.action = args[0]
   opts.action = if typeof(opts.action) != 'string' then 'matchAll'
   shouldBeInList opts.action, ['match', 'matchAll']
-  requiredOpts opts, [['grammarPath', 'exprPath', 'expr'], ['inputPath', 'input']]
+  requiredOpts opts, [['grammarPath', 'parser'], ['inputPath', 'input']]
   throw new Error 'rule is required when grammar specified' if opts.grammarPath? and !opts.rule?
   prepareOptions opts
   opts.output.write grammar.eval opts
 
 compile = ->
-  [expr, opts] = arguments
-  opts.expr = expr if expr?
+  [parser, opts] = arguments
+  opts.parser = parser if parser?
   prepareOptions opts
-  requiredOpts opts, [['grammarPath', 'exprPath', 'expr']]
+  requiredOpts opts, [['parserPath', 'parser']]
   opts.output.write grammar.compile opts
 
 # CLI
@@ -70,20 +72,22 @@ cli
 
 cli.Command.prototype.addCommonOptions = ->
   @option '-i, --inputPath <file>', 'An input file'
-  @option '-g, --grammarPath <file>', 'A grammar file', getGrammarPath
-  @option '-e, --exprPath <file>', 'A file with expression'
+  @option '-p, --parserPath <file>', 'A grammar file (-g,r,-e options are ignored)'
   @option '-o, --output <file>', 'If omitted stdout will be used'
+  @option '-g, --grammar', 'Parser is specified as grammar'
+  @option '-r, --rule', 'Parser is specified as rule (this is only one rule in the grammar)'
+  @option '-e, --expr', 'Parser is specified as expression (this is only one expression in the grammar)'
 
 cli.on '--help', ->
   message = [
-    '  You can specify only one options from each list, but not their combinations:'
-    '    -g, -ef, e'
-    '    -i, if'
+    '  Both, eval and compile commands, can get parser as first argument (see examples).'
+    '  Parser must be specified in one of three forms of:'
+    '    -g, -r, e'
     ''
     '  Examples:'
     '    cli.coffee eval "^digit:a ^digit:b -> a*b" "56"'
     '    cli.coffee eval """123""" "123"'
-    '    cli.coffee compile "^digit:a ^digit:b -> a*b" -t -f json'
+    '    cli.coffee compile "^digit:a ^digit:b -> a*b" -t -of json'
   ]
   console.log message.join '\n'
 
@@ -91,7 +95,7 @@ cli
   .command 'eval [matchAll|match] [expr] [input]'
   .description 'Match input text against grammar'
   .addCommonOptions()
-  .option '-r, --rule <name>', 'A rule name to apply'
+  .option '-a, --applyRule <rulename>', 'A rule name to apply'
   .action evaluate
 
 cli
@@ -99,7 +103,7 @@ cli
   .description 'Compile grammar (or expression) into javascript or json AST'
   .addCommonOptions()
   .option '-t, --truncate', 'Truncate compiled code to valuable part'
-  .option '-f, --format <ast|json|js>', 'Format to compile to'
+  .option '-f, --outputFormat <ast|json|js>', 'Format to compile to'
   .action compile
 
 cli.parse process.argv

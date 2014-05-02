@@ -13,7 +13,12 @@ beautify = require '../../lib/tools/beautify'
 #   ...
 # ]
 exports.CodeParser = class CodeParser
-  constructor: (@code) ->
+  constructor: (@code, @opts) ->
+    @opts ?= {}
+    @opts.parserFormat ?= 'expr'
+    @opts.applyRule ?=
+      if @opts.parserFormat is 'expr' then undefined
+      else (@code.match /(\w+)\s*=/)[1]
 
   getIndentationLevel = (line) ->
     if /^\s*$/.test line then -1 # empty line
@@ -23,19 +28,25 @@ exports.CodeParser = class CodeParser
       match[0].replace(/[ ]{4}/g, '\t').length
 
   # compiles expression to different formats
-  compile = (expr) ->
-    result = {expr}
-    for format in ['ast', 'json', 'js']
-      result[format] = grammar.compile {
-        expr: expr
+  compile = (parser) ->
+    result = {parser}
+    for outputFormat in ['ast', 'json', 'js']
+      result[outputFormat] = grammar.compile {
+        parser
+        parserFormat: @opts.parserFormat
         truncate: true
-        format
+        outputFormat
       }
     result
 
-  evaluate = (expr, input) ->
+  evaluate = (parser, input) ->
     try
-      grammar.eval {expr,input}
+      grammar.eval {
+        parser
+        input
+        parserFormat: @opts.parserFormat
+        applyRule: @opts.applyRule
+      }
     catch err
       err.message.replace /\n/g, '\\n'
 
@@ -54,9 +65,9 @@ exports.CodeParser = class CodeParser
       switch lvl
         when -1 then '' # empty line
         when 1
-          newBlock.call @, compile expr = l
+          newBlock.call @, compile.call @, expr = l
         when 2
-          newEval.call @, l, evaluate expr, l
+          newEval.call @, l, evaluate.call @, expr, l
         else throw new Error 'Only two indentation levels make sense'
     @result
 

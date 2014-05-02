@@ -6,7 +6,7 @@
 ## Sequence match ``123''
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L322>
 
-```ometajs-expr-eval
+```ometajs-eval
     ``123''
         12
         1234
@@ -15,7 +15,7 @@
 ## Token match "123"
 <http://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L316>
 
-```ometajs-expr-eval
+```ometajs-eval
     "123"
         123
         123 4
@@ -28,7 +28,7 @@
 ## String match '123'
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L312>
 
-```ometajs-expr-eval
+```ometajs-eval
     'a'
         a
     'aa'
@@ -44,7 +44,7 @@
 ## Host language result -> { ..code.. }
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L286>
 
-```ometajs-expr-eval
+```ometajs-eval
      -> { 1+1 }
         la la la
     ^digit:a ^digit:b -> { a*b }
@@ -54,7 +54,7 @@
 ## Not
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L28>
 
-```ometajs-expr-eval
+```ometajs-eval
     ~"666" -> { 'ok' }
         666
         6666
@@ -63,7 +63,7 @@
 ## Lookahead
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L276>
 
-```ometajs-expr-eval
+```ometajs-eval
     ``123'' & ``456''
         123456
 ```
@@ -71,7 +71,7 @@
 ## Regexp @/.../
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L272>
 
-```ometajs-expr-eval
+```ometajs-eval
     @/\d+/
         123
 ```
@@ -82,7 +82,7 @@
 ## Predicate ?host-language-code
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L258>
 
-```ometajs-expr-eval
+```ometajs-eval
     ?this._match('2')
 ```
 
@@ -92,7 +92,7 @@ Other examples:
 ## Super call ^rule
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L250>
 
-```ometajs-expr-eval
+```ometajs-eval
     ^digit
         5
 ```
@@ -100,7 +100,7 @@ Other examples:
 ## String's chars match < a b c >
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L239>
 
-```ometajs-expr-eval
+```ometajs-eval
     <'a' 's' 'd'>
         asdf
 ```
@@ -111,7 +111,7 @@ Other examples:
 ## Choice group (a | b | c)
 <https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L212>
 
-```ometajs-expr-eval
+```ometajs-eval
     ('a'|'b'|'c')
         b
 ```
