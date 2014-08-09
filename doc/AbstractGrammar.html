@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h2 id="-abstractgrammar">Внутреннее устройство класса AbstractGrammar</h2>
+<h3 id="_rule">_rule</h3>
+<p>Метод имеет 5 аргументов:</p>
+<pre><code>name {String} rule name
+nocache {Boolean}  If true - rule will be applied without left-recursion check.
+args {Array} (optional) arguments
+cons {AbstractGrammar}
+body {Function} rule&#39;s body
+</code></pre><p>Обратите внимание на параметры, которые передаются в метод <code>_rule</code> в следующих скомпилированных выражениях.</p>
+<h3 id="expression-digit-">Expression <code>digit</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;match&quot;, null, &quot;digit&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;digit&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;digit&quot;, false, [], null, this[&quot;digit&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>5</code> <strong>evaluates to:</strong> <code>5</code></li>
+</ul>
+<h3 id="expression-digit-">Expression <code>^digit</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;super&quot;, [&quot;match&quot;, null, &quot;digit&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;super&quot;, &quot;digit&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;digit&quot;, false, [], AbstractGrammar, AbstractGrammar.prototype[&quot;digit&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>5</code> <strong>evaluates to:</strong> <code>5</code></li>
+</ul>
+<h3 id="expression-fromto-">Expression <code>fromTo(&#39;/*&#39;, &#39;*/&#39;)</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;call&quot;, null, &quot;fromTo&quot;, [&quot;\&quot;/*\&quot;&quot;, &quot;\&quot;*/\&quot;&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;fromTo&quot;, [&quot;\&quot;/*\&quot;&quot;, &quot;\&quot;*/\&quot;&quot;]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;fromTo&quot;, false, [&quot;/*&quot;, &quot;*/&quot;], null, this[&quot;fromTo&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>/* this is a comment */</code> <strong>evaluates to:</strong> <code>/* this is a comment */</code></li>
+</ul>
+<h2 id="abstractgrammar-rules">AbstractGrammar Rules</h2>
+<ul>
+<li>digit</li>
+<li>letter</li>
+<li>fromTo(from, to)</li>
+</ul>
+
+</body>
+</html>

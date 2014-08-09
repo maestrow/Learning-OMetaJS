@@ -3,7 +3,7 @@ fs = require 'fs'
 path = require 'path'
 marked = require 'marked'
 {CodeParser} = require './build/CodeParser'
-{Templator} = require './build/Templator'
+{Templator} = require 'treetemplator'
 
 
 ###
@@ -36,6 +36,9 @@ join = (lines) ->
 ###
 Templates
 ###
+
+layoutTpl =
+  _: fs.readFileSync('cases/layout/layout.html').toString()
 
 templates =
   _: """
@@ -86,15 +89,20 @@ preProcess = (content) ->
     content = content.replace match, text
   content
 
+layout = (content) ->
+  new Templator().apply { content }, layoutTpl
+
 task 'build', 'Builds all cases', (opts) ->
   opts ?= {}
+  opts.mask ?= '\\.md$'
   opts.srcDir ?= '../cases'
   opts.outDir ?= '../doc'
   srcDir = path.resolve(__dirname, opts.srcDir)
   outDir = path.resolve(__dirname, opts.outDir)
   fs.unlinkSync path.resolve outDir, f for f in fs.readdirSync outDir #when /\.html$/.test f
-  for f in fs.readdirSync srcDir when /\.md$/.test f
+  rx = new RegExp(opts.mask)
+  for f in fs.readdirSync srcDir when rx.test f
     newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
-    content = processFile "#{srcDir}/#{f}", [preProcess, marked]
+    content = processFile "#{srcDir}/#{f}", [preProcess, marked, layout]
     fs.writeFileSync newFileName, content
 

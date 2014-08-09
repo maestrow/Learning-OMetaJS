@@ -1,0 +1,30 @@
+{
+  "name": "Learning-OMetaJS",
+  "version": "0.0.0",
+  "description": "Главной целью проекта было описание возможностей\r парсер генератора [ometa-js](https://github.com/veged/ometa-js). Проект включает в себя следующие составляющие:",
+  "main": "\"cake build\"",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "ometajs": "^3.3.6",
+	  "marked": "",
+	  "js-beautify": "",
+	  "treetemplator": "git+https://github.com/maestrow/treetemplator",
+	  "commander": ""
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maestrow/Learning-OMetaJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maestrow/Learning-OMetaJS/issues"
+  },
+  "homepage": "https://github.com/maestrow/Learning-OMetaJS"
+}

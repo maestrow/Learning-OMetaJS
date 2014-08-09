@@ -16,6 +16,7 @@ Array::last = -> @[@length - 1]
 
 requireFromString = (src, filename) ->
   m = new module.constructor
+  m.paths = module.paths;
   m._compile src, filename
   m.exports
 

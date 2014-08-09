@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h1 id="ometajs-expressions-use-cases">OMetaJS Expressions Use Cases</h1>
+<p>Реализацию обработки описанных синтаксических конструкций смотрите в методе
+<a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L179">parseExpresion</a> парсера.</p>
+<h2 id="sequence-match-123-">Sequence match ``123&#39;&#39;</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L322">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L322</a></p>
+<h3 id="expression-123-">Expression <code>``123&#39;&#39;</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;seq&quot;, &quot;123&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;seq&quot;, &quot;\&quot;123\&quot;&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._seq(&quot;123&quot;))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>12</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:1\n\n\n12\n^</code></li>
+<li><code>1234</code> <strong>evaluates to:</strong> <code>123</code></li>
+</ul>
+<h2 id="token-match-123-">Token match &quot;123&quot;</h2>
+<p><a href="http://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L316">http://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L316</a></p>
+<h3 id="expression-123-">Expression <code>&quot;123&quot;</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;call&quot;, null, &quot;token&quot;, [&quot;\&quot;123\&quot;&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;token&quot;, [&quot;\&quot;123\&quot;&quot;]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;token&quot;, true, [&quot;123&quot;], null, this[&quot;token&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>123</code> <strong>evaluates to:</strong> <code>123</code></li>
+<li><code>123 4</code> <strong>evaluates to:</strong> <code>123</code></li>
+<li><code>1234</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:1\n\n\n1234\n^</code></li>
+<li><code>12</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:1\n\n\n12\n^</code></li>
+</ul>
+<h3 id="expression-123-">Expression <code>&quot;123&quot;*</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;any&quot;, [&quot;call&quot;, null, &quot;token&quot;, [&quot;\&quot;123\&quot;&quot;]]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;any&quot;, [
+            [&quot;rule&quot;, &quot;token&quot;, [&quot;\&quot;123\&quot;&quot;]]
+          ]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._any(function() {
+    return this._atomic(function() {
+      return this._rule(&quot;token&quot;, true, [&quot;123&quot;], null, this[&quot;token&quot;])
+    });
+  }))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>123 123 123</code> <strong>evaluates to:</strong> <code>123,123,123</code></li>
+</ul>
+<h2 id="string-match-123-">String match &#39;123&#39;</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L312">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L312</a></p>
+<h3 id="expression-a-">Expression <code>&#39;a&#39;</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;string&quot;, &quot;a&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;match&quot;, &quot;\&quot;a\&quot;&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._match(&quot;a&quot;))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>a</code> <strong>evaluates to:</strong> <code>a</code></li>
+</ul>
+<h3 id="expression-aa-">Expression <code>&#39;aa&#39;</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;string&quot;, &quot;aa&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;match&quot;, &quot;\&quot;aa\&quot;&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._match(&quot;aa&quot;))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>aa</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:1\n\n\naa\n^</code></li>
+</ul>
+<h2 id="number-match-123">Number match 123</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L308">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L308</a></p>
+<h2 id="rule-invocation-name-or-name-">Rule invocation name or name(...)</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L291">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L291</a></p>
+<h2 id="host-language-result-code-">Host language result -&gt; { ..code.. }</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L286">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L286</a></p>
+<h3 id="expression-1-1-">Expression <code>-&gt; { 1+1 }</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;result&quot;, &quot;function(){return 1+1}.call(this)&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;exec&quot;, &quot;function(){return 1+1}.call(this)&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._exec(function() {
+    return 1 + 1
+  }.call(this)))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>la la la</code> <strong>evaluates to:</strong> <code>2</code></li>
+</ul>
+<h3 id="expression-digit-a-digit-b-a-b-">Expression <code>^digit:a ^digit:b -&gt; { a*b }</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;arg&quot;, [&quot;super&quot;, [&quot;match&quot;, null, &quot;digit&quot;]], &quot;a&quot;],
+  [&quot;arg&quot;, [&quot;super&quot;, [&quot;match&quot;, null, &quot;digit&quot;]], &quot;b&quot;],
+  [&quot;result&quot;, &quot;function(){return a*b}.call(this)&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [&quot;a&quot;, &quot;b&quot;],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;super&quot;, &quot;digit&quot;],
+          [&quot;store&quot;, &quot;a&quot;],
+          [&quot;super&quot;, &quot;digit&quot;],
+          [&quot;store&quot;, &quot;b&quot;],
+          [&quot;exec&quot;, &quot;function(){return a*b}.call(this)&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  var a, b;
+  return (this._rule(&quot;digit&quot;, false, [], AbstractGrammar, AbstractGrammar.prototype[&quot;digit&quot;]) &amp;&amp; ((a = this._getIntermediate()), true) &amp;&amp; this._rule(&quot;digit&quot;, false, [], AbstractGrammar, AbstractGrammar.prototype[&quot;digit&quot;]) &amp;&amp; ((b = this._getIntermediate()), true) &amp;&amp; this._exec(function() {
+    return a * b
+  }.call(this)))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>78</code> <strong>evaluates to:</strong> <code>56</code></li>
+</ul>
+<h2 id="not">Not</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L28">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L28</a></p>
+<h3 id="expression-666-ok-">Expression <code>~&quot;666&quot; -&gt; { &#39;ok&#39; }</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;not&quot;, [&quot;call&quot;, null, &quot;token&quot;, [&quot;\&quot;666\&quot;&quot;]]],
+  [&quot;result&quot;, &quot;function(){return\&quot;ok\&quot;}.call(this)&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;not&quot;, [
+            [&quot;rule&quot;, &quot;token&quot;, [&quot;\&quot;666\&quot;&quot;]]
+          ]],
+          [&quot;exec&quot;, &quot;function(){return\&quot;ok\&quot;}.call(this)&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (!this._atomic(function() {
+    return this._rule(&quot;token&quot;, true, [&quot;666&quot;], null, this[&quot;token&quot;])
+  }, true) &amp;&amp; this._exec(function() {
+    return &quot;ok&quot;
+  }.call(this)))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>666</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:1\n\n\n666\n^</code></li>
+<li><code>6666</code> <strong>evaluates to:</strong> <code>ok</code></li>
+</ul>
+<h2 id="lookahead">Lookahead</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L276">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L276</a></p>
+<h3 id="expression-123-456-">Expression <code>``123&#39;&#39; &amp; ``456&#39;&#39;</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;seq&quot;, &quot;123&quot;],
+  [&quot;lookahead&quot;, [&quot;seq&quot;, &quot;456&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;seq&quot;, &quot;\&quot;123\&quot;&quot;],
+          [&quot;lookahead&quot;, [
+            [&quot;seq&quot;, &quot;\&quot;456\&quot;&quot;]
+          ]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._seq(&quot;123&quot;) &amp;&amp; this._atomic(function() {
+    return this._seq(&quot;456&quot;)
+  }, true))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>123456</code> <strong>evaluates to:</strong> <code>456</code></li>
+</ul>
+<h2 id="regexp-">Regexp @/.../</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L272">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L272</a></p>
+<h3 id="expression-d-">Expression <code>@/\d+/</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;re&quot;, &quot;/\\d+/&quot;],
+  [&quot;match&quot;, null, &quot;anything&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;re&quot;, &quot;/\\d+/&quot;],
+          [&quot;rule&quot;, &quot;anything&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._seq(/^(\d+)/) &amp;&amp; this._skip())
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>123</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:5\n\n\n123\n    ^</code></li>
+</ul>
+<h2 id="local-host-language-code">Local %host-language-code</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L264">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L264</a></p>
+<h2 id="predicate-host-language-code">Predicate ?host-language-code</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L258">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L258</a></p>
+<h3 id="expression-this-_match-2-">Expression <code>?this._match(&#39;2&#39;)</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;predicate&quot;, &quot;this._match(\&quot;2\&quot;)&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;predicate&quot;, &quot;this._match(\&quot;2\&quot;)&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return ((this._match(&quot;2&quot;)))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<p>Other examples:</p>
+<ul>
+<li><code>&#39;&lt;&#39; ?{this._options.phase == &#39;pre&#39;} | &#39;&gt;&#39; ?{this._options.phase == &#39;post&#39;}</code></li>
+</ul>
+<h2 id="super-call-rule">Super call ^rule</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L250">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L250</a></p>
+<h3 id="expression-digit-">Expression <code>^digit</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;super&quot;, [&quot;match&quot;, null, &quot;digit&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;super&quot;, &quot;digit&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;digit&quot;, false, [], AbstractGrammar, AbstractGrammar.prototype[&quot;digit&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>5</code> <strong>evaluates to:</strong> <code>5</code></li>
+</ul>
+<h2 id="string-s-chars-match-a-b-c-">String&#39;s chars match &lt; a b c &gt;</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L239">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L239</a></p>
+<h3 id="expression-a-s-d-">Expression <code>&lt;&#39;a&#39; &#39;s&#39; &#39;d&#39;&gt;</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;chars&quot;, [&quot;string&quot;, &quot;a&quot;],
+    [&quot;string&quot;, &quot;s&quot;],
+    [&quot;string&quot;, &quot;d&quot;]
+  ]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;chars&quot;, [
+            [&quot;match&quot;, &quot;\&quot;a\&quot;&quot;],
+            [&quot;match&quot;, &quot;\&quot;s\&quot;&quot;],
+            [&quot;match&quot;, &quot;\&quot;d\&quot;&quot;]
+          ]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._list(function() {
+    return this._match(&quot;a&quot;) &amp;&amp; this._match(&quot;s&quot;) &amp;&amp; this._match(&quot;d&quot;)
+  }, true))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>asdf</code> <strong>evaluates to:</strong> <code>asd</code></li>
+</ul>
+<h2 id="array-match-a-b-c-">Array match [ a b c ]</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L228">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L228</a></p>
+<h2 id="choice-group-a-b-c-">Choice group (a | b | c)</h2>
+<p><a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L212">https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/parser.js#L212</a></p>
+<h3 id="expression-a-b-c-">Expression <code>(&#39;a&#39;|&#39;b&#39;|&#39;c&#39;)</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;choice&quot;, [
+      [&quot;string&quot;, &quot;a&quot;]
+    ],
+    [
+      [&quot;string&quot;, &quot;b&quot;]
+    ],
+    [
+      [&quot;string&quot;, &quot;c&quot;]
+    ]
+  ]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;choice&quot;, [
+            [
+              [&quot;match&quot;, &quot;\&quot;a\&quot;&quot;]
+            ],
+            [
+              [&quot;match&quot;, &quot;\&quot;b\&quot;&quot;]
+            ],
+            [
+              [&quot;match&quot;, &quot;\&quot;c\&quot;&quot;]
+            ]
+          ]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return ((this._match(&quot;a&quot;) || this._match(&quot;b&quot;) || this._match(&quot;c&quot;)))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>b</code> <strong>evaluates to:</strong> <code>b</code></li>
+</ul>
+
+</body>
+</html>

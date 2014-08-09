@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h2 id="rule-names-in-expression">Rule names in expression</h2>
+<h3 id="expression-rule1-r1-rule2-r1-rule3-r3-r3-">Expression <code>rule1:r1 rule2 -&gt; [r1] | rule3:r3 -&gt; [r3]</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+    [&quot;arg&quot;, [&quot;match&quot;, null, &quot;rule1&quot;], &quot;r1&quot;],
+    [&quot;match&quot;, null, &quot;rule2&quot;],
+    [&quot;result&quot;, &quot;[r1]&quot;]
+  ],
+  [
+    [&quot;arg&quot;, [&quot;match&quot;, null, &quot;rule3&quot;], &quot;r3&quot;],
+    [&quot;result&quot;, &quot;[r3]&quot;]
+  ]
+]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;atomic&quot;, [&quot;r1&quot;],
+            [
+              [&quot;rule&quot;, &quot;rule1&quot;],
+              [&quot;store&quot;, &quot;r1&quot;],
+              [&quot;rule&quot;, &quot;rule2&quot;],
+              [&quot;exec&quot;, &quot;[r1]&quot;]
+            ]
+          ]
+        ],
+        [
+          [&quot;atomic&quot;, [&quot;r3&quot;],
+            [
+              [&quot;rule&quot;, &quot;rule3&quot;],
+              [&quot;store&quot;, &quot;r3&quot;],
+              [&quot;exec&quot;, &quot;[r3]&quot;]
+            ]
+          ]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._atomic(function() {
+    var r1;
+    return this._rule(&quot;rule1&quot;, false, [], null, this[&quot;rule1&quot;]) &amp;&amp; ((r1 = this._getIntermediate()), true) &amp;&amp; this._rule(&quot;rule2&quot;, false, [], null, this[&quot;rule2&quot;]) &amp;&amp; this._exec([r1])
+  }) || this._atomic(function() {
+    var r3;
+    return this._rule(&quot;rule3&quot;, false, [], null, this[&quot;rule3&quot;]) &amp;&amp; ((r3 = this._getIntermediate()), true) &amp;&amp; this._exec([r3])
+  }))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<h2 id="strings">Strings</h2>
+<p>To specify string you hava an options:</p>
+<ul>
+<li><code>#string</code></li>
+<li><code>`string</code></li>
+</ul>
+<h3 id="expression-string-">Expression <code>-&gt; #string</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;result&quot;, &quot;\&quot;string\&quot;&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;exec&quot;, &quot;\&quot;string\&quot;&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._exec(&quot;string&quot;))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<h3 id="expression-string-">Expression <code>-&gt;</code>string `</h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;result&quot;, &quot;\&quot;string\&quot;&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;exec&quot;, &quot;\&quot;string\&quot;&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._exec(&quot;string&quot;))
+};
+</code></pre><h4 id="matching">Matching</h4>
+
+</body>
+</html>

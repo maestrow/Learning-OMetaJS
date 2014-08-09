@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<h2 id="intermediate-value-in-rule-name">Intermediate value in rule name</h2>
+<h3 id="expression-s-spaces-s-replace-t-n-g-n-">Expression <code>:s -&gt; [#spaces, s.replace(/[ \t]+\n/g, &#39;\n&#39;)]</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;arg&quot;, [&quot;match&quot;, null, &quot;anything&quot;], &quot;s&quot;],
+  [&quot;result&quot;, &quot;[\&quot;spaces\&quot;,s.replace(/[ \\t]+\\n/g,\&quot;\\n\&quot;)]&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [&quot;s&quot;],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;anything&quot;],
+          [&quot;store&quot;, &quot;s&quot;],
+          [&quot;exec&quot;, &quot;[\&quot;spaces\&quot;,s.replace(/[ \\t]+\\n/g,\&quot;\\n\&quot;)]&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  var s;
+  return (this._skip() &amp;&amp; ((s = this._getIntermediate()), true) &amp;&amp; this._exec([&quot;spaces&quot;, s.replace(/[ \t]+\n/g, &quot;\n&quot;)]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<h3 id="expression-between-t-n-apply-t-shmakowiki-arradd-n-t-nn-oneof-shmakowiki-arrcopy-nn-allinline-nn-c-apply-t-c-">Expression <code>between :t :n = (apply(t) -&gt; ShmakoWiki.arrAdd(n, t)):nn (~oneOf(ShmakoWiki.arrCopy(nn)) allInline(nn))*:c apply(t) -&gt; c,</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;match&quot;, null, &quot;between&quot;],
+  [&quot;arg&quot;, [&quot;match&quot;, null, &quot;anything&quot;], &quot;t&quot;],
+  [&quot;arg&quot;, [&quot;match&quot;, null, &quot;anything&quot;], &quot;n&quot;],
+  [&quot;match&quot;, null, &quot;anything&quot;],
+  [&quot;arg&quot;, [&quot;choice&quot;, [
+    [&quot;call&quot;, null, &quot;apply&quot;, [&quot;t&quot;]],
+    [&quot;result&quot;, &quot;ShmakoWiki.arrAdd(n,t)&quot;]
+  ]], &quot;nn&quot;],
+  [&quot;arg&quot;, [&quot;any&quot;, [&quot;choice&quot;, [
+    [&quot;not&quot;, [&quot;call&quot;, null, &quot;oneOf&quot;, [&quot;ShmakoWiki.arrCopy(nn)&quot;]]],
+    [&quot;call&quot;, null, &quot;allInline&quot;, [&quot;nn&quot;]]
+  ]]], &quot;c&quot;],
+  [&quot;call&quot;, null, &quot;apply&quot;, [&quot;t&quot;]],
+  [&quot;result&quot;, &quot;c&quot;]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [&quot;t&quot;, &quot;n&quot;, &quot;nn&quot;, &quot;c&quot;],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;between&quot;],
+          [&quot;rule&quot;, &quot;anything&quot;],
+          [&quot;store&quot;, &quot;t&quot;],
+          [&quot;rule&quot;, &quot;anything&quot;],
+          [&quot;store&quot;, &quot;n&quot;],
+          [&quot;rule&quot;, &quot;anything&quot;],
+          [&quot;choice&quot;, [
+            [
+              [&quot;atomic&quot;, [],
+                [
+                  [&quot;rule&quot;, &quot;apply&quot;, [&quot;t&quot;]],
+                  [&quot;exec&quot;, &quot;ShmakoWiki.arrAdd(n,t)&quot;]
+                ]
+              ]
+            ]
+          ]],
+          [&quot;store&quot;, &quot;nn&quot;],
+          [&quot;any&quot;, [
+            [&quot;choice&quot;, [
+              [
+                [&quot;not&quot;, [
+                  [&quot;rule&quot;, &quot;oneOf&quot;, [&quot;ShmakoWiki.arrCopy(nn)&quot;]]
+                ]],
+                [&quot;rule&quot;, &quot;allInline&quot;, [&quot;nn&quot;]]
+              ]
+            ]]
+          ]],
+          [&quot;store&quot;, &quot;c&quot;],
+          [&quot;rule&quot;, &quot;apply&quot;, [&quot;t&quot;]],
+          [&quot;exec&quot;, &quot;c&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  var t, n, nn, c;
+  return (this._rule(&quot;between&quot;, false, [], null, this[&quot;between&quot;]) &amp;&amp; this._skip() &amp;&amp; ((t = this._getIntermediate()), true) &amp;&amp; this._skip() &amp;&amp; ((n = this._getIntermediate()), true) &amp;&amp; this._skip() &amp;&amp; (this._atomic(function() {
+    return this._rule(&quot;apply&quot;, false, [t], null, this[&quot;apply&quot;]) &amp;&amp; this._exec(ShmakoWiki.arrAdd(n, t))
+  })) &amp;&amp; ((nn = this._getIntermediate()), true) &amp;&amp; this._any(function() {
+    return this._atomic(function() {
+      return (!this._atomic(function() {
+        return this._rule(&quot;oneOf&quot;, false, [ShmakoWiki.arrCopy(nn)], null, this[&quot;oneOf&quot;])
+      }, true) &amp;&amp; this._rule(&quot;allInline&quot;, false, [nn], null, this[&quot;allInline&quot;]))
+    });
+  }) &amp;&amp; ((c = this._getIntermediate()), true) &amp;&amp; this._rule(&quot;apply&quot;, false, [t], null, this[&quot;apply&quot;]) &amp;&amp; this._exec(c))
+};
+</code></pre><h4 id="matching">Matching</h4>
+
+</body>
+</html>
