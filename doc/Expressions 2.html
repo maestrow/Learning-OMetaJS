@@ -59,16 +59,16 @@
 };
 </code></pre><h4 id="matching">Matching</h4>
 <h2 id="strings">Strings</h2>
-<p>To specify string you hava an options:</p>
+<p>To specify string you have an options:</p>
 <ul>
 <li><code>#string</code></li>
 <li><code>`string</code></li>
 </ul>
-<h3 id="expression-string-">Expression <code>-&gt; #string</code></h3>
+<h3 id="expression-string-">Expression <code>#string</code></h3>
 <h4 id="compilations">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
-  [&quot;result&quot;, &quot;\&quot;string\&quot;&quot;]
+  [&quot;string&quot;, &quot;string&quot;]
 ]]
 </code></pre><p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
@@ -76,7 +76,7 @@
     [
       [&quot;choice&quot;, [
         [
-          [&quot;exec&quot;, &quot;\&quot;string\&quot;&quot;]
+          [&quot;match&quot;, &quot;\&quot;string\&quot;&quot;]
         ]
       ]]
     ]
@@ -84,7 +84,7 @@
 ]]
 </code></pre><p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
-  return (this._exec(&quot;string&quot;))
+  return (this._match(&quot;string&quot;))
 };
 </code></pre><h4 id="matching">Matching</h4>
 <h3 id="expression-string-">Expression <code>-&gt;</code>string `</h3>
@@ -110,6 +110,8 @@
   return (this._exec(&quot;string&quot;))
 };
 </code></pre><h4 id="matching">Matching</h4>
+<h2 id="symbol-">Symbol @</h2>
+<p>Похоже, что @ служил в качестве префикса для указания правила. Сейчас правило можно указывать без этого префикса.  </p>
 
 </body>
 </html>

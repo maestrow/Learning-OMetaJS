@@ -80,26 +80,27 @@ cli.Command.prototype.addCommonOptions = ->
 
 cli.on '--help', ->
   message = [
+    '  For help about specific command:'
+    '     cli command -h'
+    ''
     '  Both, eval and compile commands, can get parser as first argument (see examples).'
     '  Parser must be specified in one of three forms of:'
-    '    -g, -r, e'
+    '    -g, -r, -e'
     ''
     '  Examples:'
-    '    cli.coffee eval "^digit:a ^digit:b -> a*b" "56"'
-    '    cli.coffee eval """123""" "123"'
-    '    cli.coffee compile "^digit:a ^digit:b -> a*b" -t -of json'
+    '    cli eval "^digit:a ^digit:b -> a*b" "56"'
+    '    cli eval """123""" "123"'
+    '    cli compile "^digit:a ^digit:b -> a*b" -t -f json'
   ]
   console.log message.join '\n'
 
-cli
-  .command 'eval [matchAll|match] [expr] [input]'
+cli.command 'eval [matchAll|match] [expr] [input]'
   .description 'Match input text against grammar'
   .addCommonOptions()
   .option '-a, --applyRule <rulename>', 'A rule name to apply'
   .action evaluate
 
-cli
-  .command 'compile [expr]'
+cli.command 'compile [expr]'
   .description 'Compile grammar (or expression) into javascript or json AST'
   .addCommonOptions()
   .option '-t, --truncate', 'Truncate compiled code to valuable part'

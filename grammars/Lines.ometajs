@@ -1,0 +1,19 @@
+/**
+
+Правила isBol и isEol можно применять только в коньюнкции с другими правилами, передвигающими позицию.
+Иначе получится бесконечный цикл. Например: text = (isBol | isEol | char)+. Это правило с первого же входного символа
+сработает на первом варианте isBol, при этом позиция не передвинется, модификатор "+" повторит действие снова и так
+до бесконечности.
+
+**/
+
+ometa Lines {
+    begin = ?{this._offset == 0},
+
+    isBol = ~end (begin | ?{this._source.substr(this._offset-1, 1) == '\n'}),  // Beginning Of the Line
+    isEol = '\n' | end,    // End Of Line
+
+    bol = isBol char:c -> '>' + c,
+    eol = char:c isEol -> c + '|',
+    text = (bol | eol | char)+,
+}

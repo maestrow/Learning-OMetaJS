@@ -1,0 +1,20 @@
+ometa Quantifier {
+    item = seq('abc '),
+    repeat :rule :count = (apply(rule) ?{count-- >= 0})*:result ?{count == 0} -> result,
+    top3 = repeat(`item, 3),
+    top0 = repeat(`item, 0),
+}
+
+/*
+Should success:
+  Quantifier.matchAll 'abc abc abc ', 'top3'
+  Quantifier.matchAll 'abc abc abc ab', 'top3'
+  Quantifier.matchAll '', 'top0'
+  Quantifier.matchAll 'ab', 'top0'
+
+Should fail:
+  Quantifier.matchAll 'abc abc abc abc ', 'top3'
+  Quantifier.matchAll 'abc abc ab', 'top3'
+  Quantifier.matchAll 'abc ', 'top0'
+  Quantifier.matchAll 'abc ab', 'top0'
+*/

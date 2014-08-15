@@ -1,0 +1,18 @@
+ometa Between {
+    // Generic Rule:
+    between :b :e = apply(b) (~apply(e) char)+:c apply(e) -> c.join(''),
+
+    // Settings
+    link_start = seq('<<') | seq('[['),
+    link_end = seq('>>') | seq(']]'),
+    img_start = seq('((') | seq('{{'),
+    img_end = seq('))') | seq('}}'),
+
+    // Rules
+    link = between(`link_start, `link_end):a -> [`link, a],
+    img = between(`img_start, `img_end):a -> [`img, a],
+
+    // Top Rules
+    content = link | img,
+    top = content+
+}

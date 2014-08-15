@@ -1,0 +1,20 @@
+ometa List {
+    begin = ?{this._offset == 0},
+    isBol = ~end (begin | ?{this._source.substr(this._offset-1, 1) == '\n'}),  // Beginning Of the Line
+    isEol = '\n' | end,    // End Of Line
+    untilEol = (~isEol char)+:c isEol -> c.join(''),
+    repeat :rule :count = (apply(rule) ?{count-- >= 0})*:result ?{count == 0} -> result,
+
+    onespace = ' ',
+
+    listItemContent = untilEol:c -> c,
+    bullet = ((digit+ '.') | '-' | '+' | '*') ' ',
+    listItem :level = isBol repeat(`onespace, level*2) bullet listItemContent:c list(level+1)?:sublist -> {
+      var content = [c];
+      if (sublist && sublist.length > 0)
+        content.push(sublist);
+      return [`li, content]
+    },
+    list :level = listItem(level)+:items -> [`list, items],
+    topList = list(0),
+}

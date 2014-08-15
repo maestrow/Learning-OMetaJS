@@ -98,7 +98,7 @@ exports.eval = (config) ->
   grammar = getGrammarObject config
   config.action = config.action || 'matchAll'
   result = grammar[config.action] config.input, config.applyRule || generatedRuleName
-  result.toString()
+  if result? then result.toString() else 'undefined'
 
 ###
   config:

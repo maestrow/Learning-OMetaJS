@@ -1,0 +1,9 @@
+ometa LinkAndImg {
+    imgExt = seq('.jpg') | seq('.gif') | seq('.png') | seq('.svg'),
+
+    http = seq('http') 's'?:a seq('://'):b -> 'http' + (a||'') + b,
+    href :ext = http:a (~(apply(ext) /\s|$|\)/) char)+:b apply(ext):c -> a + b.join('') + (ext == `empty ? '' : c),
+
+    rawImg = href(`imgExt),
+    rawLink = href(`empty),
+}

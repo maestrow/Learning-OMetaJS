@@ -27,6 +27,6 @@ Then you can compile that expression:
 and debug it
  */
 
-var grammar = require('./../tmp/fromTo.js').GeneratedGrammar;
-var result = grammar.matchAll('/*123*/', 'generatedRule');
+var grammar = require('./../tmp/atomic.js').GeneratedGrammar;
+var result = grammar.matchAll('bc', 'generatedRule');
 console.log(result);

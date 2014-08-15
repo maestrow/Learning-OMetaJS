@@ -5,15 +5,37 @@
     <title></title>
 </head>
 <body>
-<h2 id="-abstractgrammar">Внутреннее устройство класса AbstractGrammar</h2>
-<h3 id="_rule">_rule</h3>
-<p>Метод имеет 5 аргументов:</p>
+<h1 id="-abstractgrammar">Внутреннее устройство класса AbstractGrammar</h1>
+<p>В данном файле приводятся правила базового класса грамматики, которые описаны в классе 
+<a href="https://github.com/veged/ometa-js/blob/nodejs/lib/ometajs/core/grammar.js#L437">AbstractGrammar</a>.</p>
+<p>Метод <code>_rule</code> имеет 5 аргументов:</p>
 <pre><code>name {String} rule name
 nocache {Boolean}  If true - rule will be applied without left-recursion check.
 args {Array} (optional) arguments
 cons {AbstractGrammar}
 body {Function} rule&#39;s body
-</code></pre><p>Обратите внимание на параметры, которые передаются в метод <code>_rule</code> в следующих скомпилированных выражениях.</p>
+</code></pre><p>AbstractGrammar Rules:</p>
+<ul>
+<li>token</li>
+<li>anything</li>
+<li>space</li>
+<li>spaces</li>
+<li>fromTo(from, to)</li>
+<li>exactly</li>
+<li>char</li>
+<li>letter</li>
+<li>digit</li>
+<li>seq</li>
+<li>listOf</li>
+<li>empty</li>
+<li>end</li>
+</ul>
+<h2 id="fromto">fromTo</h2>
+<p>Обратите внимание на параметры, которые передаются в метод <code>_rule</code> в следующих скомпилированных выражениях.</p>
+<pre><code class="lang-ometajs-eval">    fromTo(&#39;/*&#39;, &#39;*/&#39;)
+        /* this is a comment */
+</code></pre>
+<h2 id="digit">digit</h2>
 <h3 id="expression-digit-">Expression <code>digit</code></h3>
 <h4 id="compilations">Compilations</h4>
 <p><strong>AST:</strong></p>
@@ -66,11 +88,13 @@ body {Function} rule&#39;s body
 <ul>
 <li><code>5</code> <strong>evaluates to:</strong> <code>5</code></li>
 </ul>
-<h3 id="expression-fromto-">Expression <code>fromTo(&#39;/*&#39;, &#39;*/&#39;)</code></h3>
+<h2 id="seq">seq</h2>
+<p>В отличии от простой строки в метод <code>seq</code> можно передать параметр</p>
+<h3 id="expression-seq-qwe-">Expression <code>seq(&#39;qwe&#39;)</code></h3>
 <h4 id="compilations">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
-  [&quot;call&quot;, null, &quot;fromTo&quot;, [&quot;\&quot;/*\&quot;&quot;, &quot;\&quot;*/\&quot;&quot;]]
+  [&quot;call&quot;, null, &quot;seq&quot;, [&quot;\&quot;qwe\&quot;&quot;]]
 ]]
 </code></pre><p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
@@ -78,7 +102,7 @@ body {Function} rule&#39;s body
     [
       [&quot;choice&quot;, [
         [
-          [&quot;rule&quot;, &quot;fromTo&quot;, [&quot;\&quot;/*\&quot;&quot;, &quot;\&quot;*/\&quot;&quot;]]
+          [&quot;rule&quot;, &quot;seq&quot;, [&quot;\&quot;qwe\&quot;&quot;]]
         ]
       ]]
     ]
@@ -86,17 +110,70 @@ body {Function} rule&#39;s body
 ]]
 </code></pre><p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
-  return (this._rule(&quot;fromTo&quot;, false, [&quot;/*&quot;, &quot;*/&quot;], null, this[&quot;fromTo&quot;]))
+  return (this._rule(&quot;seq&quot;, false, [&quot;qwe&quot;], null, this[&quot;seq&quot;]))
 };
 </code></pre><h4 id="matching">Matching</h4>
 <ul>
-<li><code>/* this is a comment */</code> <strong>evaluates to:</strong> <code>/* this is a comment */</code></li>
+<li><code>qwer</code> <strong>evaluates to:</strong> <code>qwe</code></li>
 </ul>
-<h2 id="abstractgrammar-rules">AbstractGrammar Rules</h2>
+<h2 id="apply">apply</h2>
+<p>apply - это правило, которое вызывает применение указанного в первом аргументе правила. 
+Остальные аргументы передаются в качестве параметров этому правилу. </p>
+<h3 id="expression-apply-fromto-">Expression <code>apply(&#39;fromTo&#39;, &#39;/*&#39;, &#39;*/&#39;)</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;call&quot;, null, &quot;apply&quot;, [&quot;\&quot;fromTo\&quot;&quot;, &quot;\&quot;/*\&quot;&quot;, &quot;\&quot;*/\&quot;&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;apply&quot;, [&quot;\&quot;fromTo\&quot;&quot;, &quot;\&quot;/*\&quot;&quot;, &quot;\&quot;*/\&quot;&quot;]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;apply&quot;, false, [&quot;fromTo&quot;, &quot;/*&quot;, &quot;*/&quot;], null, this[&quot;apply&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
 <ul>
-<li>digit</li>
-<li>letter</li>
-<li>fromTo(from, to)</li>
+<li><code>/* this is a comment */ and this is a code</code> <strong>evaluates to:</strong> <code>/* this is a comment */</code></li>
+</ul>
+<h2 id="listof">listOf</h2>
+<p>Список из последовательностей записанных через разделитель. 
+Последовательности должны удовлетворять правилу, указанному в первом аргументе.
+Разделитель задается во втором аргументе</p>
+<h3 id="expression-listof-digit-">Expression <code>listOf(</code>digit, &#39;..&#39;) `</h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;call&quot;, null, &quot;listOf&quot;, [&quot;\&quot;digit\&quot;&quot;, &quot;\&quot;..\&quot;&quot;]]
+]]
+</code></pre><p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;rule&quot;, &quot;listOf&quot;, [&quot;\&quot;digit\&quot;&quot;, &quot;\&quot;..\&quot;&quot;]]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre><p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return (this._rule(&quot;listOf&quot;, false, [&quot;digit&quot;, &quot;..&quot;], null, this[&quot;listOf&quot;]))
+};
+</code></pre><h4 id="matching">Matching</h4>
+<ul>
+<li><code>1..2..3..4..5i</code> <strong>evaluates to:</strong> <code>1,2,3,4,5</code></li>
 </ul>
 
 </body>

@@ -83,6 +83,7 @@ preProcess = (content) ->
     parserOpts = if parserOpts? then parserOpts.replace /([a-z][^:]*)(?=\s*:)/g, '"$1"' else {}
     new CodeParser(code, parserOpts).parse(debugThisMethod)
 
+  matches = matches || []
   for match in matches
     data = getData.apply @, (match.match new RegExp rxText)[1..2]
     text = if debugThisMethod then data else new Templator(tplOpts).apply data, templates
@@ -92,6 +93,11 @@ preProcess = (content) ->
 layout = (content) ->
   new Templator().apply { content }, layoutTpl
 
+option '-m', '--mask [Mask]', 'Files to process'
+option '-s', '--srcDir [Dir]', 'Source directory'
+option '-o', '--outDir [Dir]', 'Output directory'
+
+# Ex: cake -m rules\.md build
 task 'build', 'Builds all cases', (opts) ->
   opts ?= {}
   opts.mask ?= '\\.md$'
@@ -100,8 +106,9 @@ task 'build', 'Builds all cases', (opts) ->
   srcDir = path.resolve(__dirname, opts.srcDir)
   outDir = path.resolve(__dirname, opts.outDir)
   fs.unlinkSync path.resolve outDir, f for f in fs.readdirSync outDir #when /\.html$/.test f
-  rx = new RegExp(opts.mask)
+  rx = new RegExp(opts.mask, 'i')
   for f in fs.readdirSync srcDir when rx.test f
+    console.log f
     newFileName = outDir + '/' + getFileNameWithoutExtension(f) + '.html'
     content = processFile "#{srcDir}/#{f}", [preProcess, marked, layout]
     fs.writeFileSync newFileName, content

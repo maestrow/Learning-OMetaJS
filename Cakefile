@@ -2,4 +2,10 @@
 fs = require('fs')
 regEx = new RegExp '\.coffee$'
 tasks = fs.readdirSync('tasks')
-require('./tasks/' + task.replace(regEx, '')) for task in tasks when regEx.test task
+require('./tasks/' + t.replace(regEx, '')) for t in tasks when regEx.test t
+
+task 'options', 'options test', (opts) ->
+  console.log opts
+
+
+

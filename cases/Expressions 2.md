@@ -6,12 +6,16 @@
 
 ## Strings
 
-To specify string you hava an options:
+To specify string you have an options:
 
 - `#string`
 - ``string`
 
 ```ometajs-eval
-    -> #string
+    #string
     -> `string
 ```
+
+## Symbol @
+
+Похоже, что @ служил в качестве префикса для указания правила. Сейчас правило можно указывать без этого префикса.  
