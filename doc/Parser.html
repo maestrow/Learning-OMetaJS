@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<ul>
+<li>_offset</li>
+<li>current()</li>
+</ul>
+<h3 id="expression-this_offset--0-char">Expression <code>?{this._offset == 0} char</code></h3>
+<h4 id="compilations">Compilations</h4>
+<p><strong>AST:</strong></p>
+<pre><code>[&quot;choice&quot;, [
+  [&quot;predicate&quot;, &quot;function(){return this._offset==0}.call(this)&quot;],
+  [&quot;match&quot;, null, &quot;char&quot;]
+]]
+</code></pre>
+<p><strong>JSON:</strong></p>
+<pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
+  [&quot;rule&quot;, &quot;generatedRule&quot;, [],
+    [
+      [&quot;choice&quot;, [
+        [
+          [&quot;predicate&quot;, &quot;function(){return this._offset==0}.call(this)&quot;],
+          [&quot;rule&quot;, &quot;char&quot;]
+        ]
+      ]]
+    ]
+  ]
+]]
+</code></pre>
+<p><strong>Javascript:</strong></p>
+<pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
+  return ((function() {
+    return this._offset == 0
+  }.call(this)) &amp;&amp; this._rule(&quot;char&quot;, false, [], null, this[&quot;char&quot;]))
+};
+</code></pre>
+<h4 id="matching">Matching</h4>
+<ul>
+<li><code>qwe</code> <strong>evaluates to:</strong> <code>q</code></li>
+</ul>
+
+</body>
+</html>

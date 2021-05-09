@@ -10,14 +10,15 @@
 <p>В следующем перимере один и тот же шаблон выполняется как неатомарная и как атомарная операция. 
 В первом случае будет возвращено значение сопоставления текста с последним выражением. 
 Во втором - весь текст, как успешно сопоставленный выражению в скобках.</p>
-<h3 id="expression-a-b-">Expression <code>`a</code>b `</h3>
+<h3 id="expression--a-b">Expression <code> </code>a <code>b </code></h3>
 <h4 id="compilations">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
   [&quot;string&quot;, &quot;a&quot;],
   [&quot;string&quot;, &quot;b&quot;]
 ]]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [],
     [
@@ -30,16 +31,18 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   return (this._match(&quot;a&quot;) &amp;&amp; this._match(&quot;b&quot;))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching">Matching</h4>
 <ul>
 <li><code>ab</code> <strong>evaluates to:</strong> <code>b</code></li>
 </ul>
-<h3 id="expression-a-b-">Expression <code>(</code>a <code>b)</code></h3>
-<h4 id="compilations">Compilations</h4>
+<h3 id="expression--a-b-1">Expression <code> (</code>a <code>b) </code></h3>
+<h4 id="compilations-1">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
   [&quot;choice&quot;, [
@@ -47,7 +50,8 @@
     [&quot;string&quot;, &quot;b&quot;]
   ]]
 ]]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [],
     [
@@ -68,19 +72,21 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   return ((this._atomic(function() {
     return this._match(&quot;a&quot;) &amp;&amp; this._match(&quot;b&quot;)
   })))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching-1">Matching</h4>
 <ul>
 <li><code>ab</code> <strong>evaluates to:</strong> <code>ab</code></li>
 </ul>
 <p>Операнды оператора ИЛИ выполняются как атомарная операция:</p>
-<h3 id="expression-a-b-c-">Expression <code>`a |</code>b <code>c</code></h3>
-<h4 id="compilations">Compilations</h4>
+<h3 id="expression--a--b-c-">Expression <code> </code>a | <code>b </code>c `</h3>
+<h4 id="compilations-2">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
     [&quot;string&quot;, &quot;a&quot;]
@@ -90,7 +96,8 @@
     [&quot;string&quot;, &quot;c&quot;]
   ]
 ]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [],
     [
@@ -110,27 +117,30 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   return (this._match(&quot;a&quot;) || this._atomic(function() {
     return this._match(&quot;b&quot;) &amp;&amp; this._match(&quot;c&quot;)
   }))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching-2">Matching</h4>
 <ul>
 <li><code>a</code> <strong>evaluates to:</strong> <code>a</code></li>
 <li><code>bc</code> <strong>evaluates to:</strong> <code>bc</code></li>
 </ul>
 <p>Оператор &amp; (lookahead) создает атомарную операцию</p>
-<h3 id="expression-a-b-b-">Expression <code>`a &amp;</code>b <code>b</code></h3>
-<h4 id="compilations">Compilations</h4>
+<h3 id="expression--a--b-b-">Expression <code> </code>a &amp; <code>b </code>b `</h3>
+<h4 id="compilations-3">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
   [&quot;string&quot;, &quot;a&quot;],
   [&quot;lookahead&quot;, [&quot;string&quot;, &quot;b&quot;]],
   [&quot;string&quot;, &quot;b&quot;]
 ]]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [],
     [
@@ -146,32 +156,36 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   return (this._match(&quot;a&quot;) &amp;&amp; this._atomic(function() {
     return this._match(&quot;b&quot;)
   }, true) &amp;&amp; this._match(&quot;b&quot;))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching-3">Matching</h4>
 <ul>
 <li><code>abb</code> <strong>evaluates to:</strong> <code>b</code></li>
 <li><code>ab</code> <strong>evaluates to:</strong> <code>b</code></li>
 <li><code>a</code> <strong>evaluates to:</strong> <code>generatedRule rule failed at: 1:2\n\n\na\n ^</code></li>
 </ul>
-<h2 id="-">Преобразование значения -&gt;</h2>
+<h2 id="преобразование-значения--">Преобразование значения -&gt;</h2>
 <p>Оператор <code>-&gt;</code> может быть использован после обращению к любому правилу.</p>
 <pre><code>    (&#39;a&#39;:c -&gt; c.toUpperCase()):x (&#39;B&#39;:c -&gt; c.toLowerCase()):y -&gt; x+y
-</code></pre><h2 id="variables">Variables</h2>
+</code></pre>
+<h2 id="variables">Variables</h2>
 <h3 id="variable-in-expression">Variable in expression</h3>
-<h3 id="expression-char-x-char-y-y-x-">Expression <code>char:x char:y -&gt; [y, x]</code></h3>
-<h4 id="compilations">Compilations</h4>
+<h3 id="expression-charx-chary---y-x">Expression <code>char:x char:y -&gt; [y, x]</code></h3>
+<h4 id="compilations-4">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
   [&quot;arg&quot;, [&quot;match&quot;, null, &quot;char&quot;], &quot;x&quot;],
   [&quot;arg&quot;, [&quot;match&quot;, null, &quot;char&quot;], &quot;y&quot;],
   [&quot;result&quot;, &quot;[y,x]&quot;]
 ]]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [&quot;x&quot;, &quot;y&quot;],
     [
@@ -187,18 +201,20 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   var x, y;
   return (this._rule(&quot;char&quot;, false, [], null, this[&quot;char&quot;]) &amp;&amp; ((x = this._getIntermediate()), true) &amp;&amp; this._rule(&quot;char&quot;, false, [], null, this[&quot;char&quot;]) &amp;&amp; ((y = this._getIntermediate()), true) &amp;&amp; this._exec([y, x]))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching-4">Matching</h4>
 <ul>
 <li><code>12</code> <strong>evaluates to:</strong> <code>2,1</code></li>
 </ul>
 <h3 id="rule-with-parameters">Rule with parameters</h3>
-<h3 id="expression-fromto-x-y-seq-x-s-seq-y-char-c-seq-y-e-s-c-join-e-">Expression <code>fromTo :x :y = seq(x):s (~seq(y) char)*:c seq(y):e -&gt; [s, c.join(&#39;&#39;), e]</code></h3>
-<h4 id="compilations">Compilations</h4>
+<h3 id="expression-fromto-x-y--seqxs-seqy-charc-seqye---s-cjoin-e">Expression <code>fromTo :x :y = seq(x):s (~seq(y) char)*:c seq(y):e -&gt; [s, c.join(&#39;&#39;), e]</code></h3>
+<h4 id="compilations-5">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
   [&quot;match&quot;, null, &quot;fromTo&quot;],
@@ -213,7 +229,8 @@
   [&quot;arg&quot;, [&quot;call&quot;, null, &quot;seq&quot;, [&quot;y&quot;]], &quot;e&quot;],
   [&quot;result&quot;, &quot;[s,c.join(\&quot;\&quot;),e]&quot;]
 ]]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [&quot;x&quot;, &quot;y&quot;, &quot;s&quot;, &quot;c&quot;, &quot;e&quot;],
     [
@@ -246,7 +263,8 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   var x, y, s, c, e;
   return (this._rule(&quot;fromTo&quot;, false, [], null, this[&quot;fromTo&quot;]) &amp;&amp; this._skip() &amp;&amp; ((x = this._getIntermediate()), true) &amp;&amp; this._skip() &amp;&amp; ((y = this._getIntermediate()), true) &amp;&amp; this._skip() &amp;&amp; this._rule(&quot;seq&quot;, false, [x], null, this[&quot;seq&quot;]) &amp;&amp; ((s = this._getIntermediate()), true) &amp;&amp; this._any(function() {
@@ -257,16 +275,18 @@
     });
   }) &amp;&amp; ((c = this._getIntermediate()), true) &amp;&amp; this._rule(&quot;seq&quot;, false, [y], null, this[&quot;seq&quot;]) &amp;&amp; ((e = this._getIntermediate()), true) &amp;&amp; this._exec([s, c.join(&quot;&quot;), e]))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching-5">Matching</h4>
 <h2 id="intermediate-value-in-rule-name">Intermediate value in rule name</h2>
-<h3 id="expression-s-spaces-s-replace-t-n-g-n-">Expression <code>:s -&gt; [#spaces, s.replace(/[ \t]+\n/g, &#39;\n&#39;)]</code></h3>
-<h4 id="compilations">Compilations</h4>
+<h3 id="expression-s---spaces-sreplace-tng-n">Expression <code>:s -&gt; [#spaces, s.replace(/[ \t]+\n/g, &#39;\n&#39;)]</code></h3>
+<h4 id="compilations-6">Compilations</h4>
 <p><strong>AST:</strong></p>
 <pre><code>[&quot;choice&quot;, [
   [&quot;arg&quot;, [&quot;match&quot;, null, &quot;anything&quot;], &quot;s&quot;],
   [&quot;result&quot;, &quot;[\&quot;spaces\&quot;,s.replace(/[ \\t]+\\n/g,\&quot;\\n\&quot;)]&quot;]
 ]]
-</code></pre><p><strong>JSON:</strong></p>
+</code></pre>
+<p><strong>JSON:</strong></p>
 <pre><code>[&quot;grammar&quot;, &quot;GeneratedGrammar&quot;, &quot;AbstractGrammar&quot;, [
   [&quot;rule&quot;, &quot;generatedRule&quot;, [&quot;s&quot;],
     [
@@ -280,12 +300,14 @@
     ]
   ]
 ]]
-</code></pre><p><strong>Javascript:</strong></p>
+</code></pre>
+<p><strong>Javascript:</strong></p>
 <pre><code>GeneratedGrammar.prototype[&quot;generatedRule&quot;] = function $generatedRule() {
   var s;
   return (this._skip() &amp;&amp; ((s = this._getIntermediate()), true) &amp;&amp; this._exec([&quot;spaces&quot;, s.replace(/[ \t]+\n/g, &quot;\n&quot;)]))
 };
-</code></pre><h4 id="matching">Matching</h4>
+</code></pre>
+<h4 id="matching-6">Matching</h4>
 
 </body>
 </html>

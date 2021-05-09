@@ -31,7 +31,7 @@ AbstractGrammar Rules:
 ## fromTo
 
 Обратите внимание на параметры, которые передаются в метод `_rule` в следующих скомпилированных выражениях.
-```ometajs-eval        
+```ometajs-eval
     fromTo('/*', '*/')
         /* this is a comment */
 ```

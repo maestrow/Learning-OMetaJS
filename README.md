@@ -14,6 +14,23 @@
 Т.о. просматривая файлы документации `doc` можно понимать как интерпретируются отдельные выражения парсер генератора ometajs.
 Кроме того можно эксперементировать с выражениями с помощью командной утилиты `cli`
 
+
+## Usage
+
+Prepare:
+
+    chmod +x ./cli
+
+cli:
+
+    cli
+    ./cli eval "^digit:a ^digit:b -> a*b" "56" 2>/dev/null
+
+Build:
+
+    npm run cake
+    npm run cake -- build
+
 ## ToDo
 
 - Внедрить функционал cli в ometajs2js

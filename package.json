@@ -1,21 +1,13 @@
 {
-  "name": "Learning-OMetaJS",
+  "name": "learning-ometajs",
   "version": "0.0.0",
-  "description": "Главной целью проекта было описание возможностей\r парсер генератора [ometa-js](https://github.com/veged/ometa-js). Проект включает в себя следующие составляющие:",
-  "main": "\"cake build\"",
+  "description": "Learning OMetaJS: https://github.com/veged/ometa-js.",
   "directories": {
     "doc": "doc"
   },
-  "dependencies": {
-    "ometajs": "^3.3.6",
-	  "marked": "",
-	  "js-beautify": "",
-	  "treetemplator": "git+https://github.com/maestrow/treetemplator",
-	  "commander": ""
-  },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cli": "coffee cli.coffee",
+    "cake": "cake"
   },
   "repository": {
     "type": "git",
@@ -26,5 +18,16 @@
   "bugs": {
     "url": "https://github.com/maestrow/Learning-OMetaJS/issues"
   },
-  "homepage": "https://github.com/maestrow/Learning-OMetaJS"
+  "homepage": "https://github.com/maestrow/Learning-OMetaJS",
+  "dependencies": {
+    "commander": "7.2.0",
+    "js-beautify": "1.13.13",
+    "marked": "2.0.3",
+    "ometajs": "^4.0.0",
+    "require-from-string": "^2.0.2",
+    "treetemplator": "git+https://github.com/maestrow/treetemplator"
+  },
+  "devDependencies": {
+    "coffeescript": "^2.5.1"
+  }
 }

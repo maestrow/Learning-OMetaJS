@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<p>Пример наследования и использования произвольных методов в грамматике.</p>
+<pre><code>var Extmd = require(&#39;../Extmd.ometajs&#39;).Extmd;
+
+ometa ExtmdTest &lt;: Extmd {
+    small = &#39;a&#39;:c -&gt; this.upper(c),
+    big = &#39;A&#39;:c -&gt; lower(c)
+}
+
+ExtmdTest.prototype.upper = function (c) {
+    return c.toUpperCase();
+};
+
+var lower = function (c) {
+    return c.toLowerCase();
+};
+</code></pre>
+
+</body>
+</html>

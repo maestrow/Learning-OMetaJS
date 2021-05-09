@@ -6,6 +6,3 @@ require('./tasks/' + t.replace(regEx, '')) for t in tasks when regEx.test t
 
 task 'options', 'options test', (opts) ->
   console.log opts
-
-
-

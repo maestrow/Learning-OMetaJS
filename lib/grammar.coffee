@@ -9,16 +9,11 @@
 ometajs = require 'ometajs'
 beautify = require './tools/beautify'
 fs = require 'fs'
+requireFromString = require 'require-from-string'
 
 # Common utils
 
 Array::last = -> @[@length - 1]
-
-requireFromString = (src, filename) ->
-  m = new module.constructor
-  m.paths = module.paths;
-  m._compile src, filename
-  m.exports
 
 skipLines = (text, lines) ->
   text.split('\n').slice(lines).join('\n')
@@ -38,11 +33,11 @@ getGrammarObjectByPath = (path) ->
   require(path)[mainGrammarName]
 
 getGrammarObjectByText = (code, grammarName) ->
-  getRrammarName = (code) ->
+  getGrammarName = (code) ->
     matches = code.match         /ometa (\w+)/g
     match = matches.last().match /ometa (\w+)/
     match[1]
-  grammarName ?= getRrammarName code
+  grammarName ?= getGrammarName code
   src = ometajs.compile code
   requireFromString(src)[grammarName]
 
