@@ -22,7 +22,7 @@
   "dependencies": {
     "commander": "7.2.0",
     "js-beautify": "1.13.13",
-    "marked": "2.0.3",
+    "marked": "4.0.10",
     "ometajs": "^4.0.0",
     "require-from-string": "^2.0.2",
     "treetemplator": "git+https://github.com/maestrow/treetemplator"
